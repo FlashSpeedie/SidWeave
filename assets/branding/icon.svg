@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="gradient-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="50%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#DB2777"/>
+    </linearGradient>
+  </defs>
+  
+  <g fill="none" stroke="url(#gradient-primary)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 28 32 
+             C 44 32, 52 32, 60 32
+             C 76 32, 84 32, 92 32"/>
+    <path d="M 28 60
+             C 44 60, 52 60, 60 60
+             C 68 60, 72 60, 76 60
+             C 80 60, 88 60, 92 60"/>
+    <path d="M 28 88
+             C 44 88, 52 88, 60 88
+             C 76 88, 84 88, 92 88"/>
+    <path d="M 60 32 L 60 60" stroke-width="3"/>
+    <path d="M 60 60 L 60 88" stroke-width="3"/>
+  </g>
+  
+  <g fill="url(#gradient-primary)">
+    <circle cx="60" cy="32" r="3"/>
+    <circle cx="60" cy="60" r="3"/>
+    <circle cx="60" cy="88" r="3"/>
+    <circle cx="28" cy="32" r="2.5" opacity="0.7"/>
+    <circle cx="92" cy="32" r="2.5" opacity="0.7"/>
+    <circle cx="28" cy="60" r="2.5" opacity="0.7"/>
+    <circle cx="92" cy="60" r="2.5" opacity="0.7"/>
+    <circle cx="28" cy="88" r="2.5" opacity="0.7"/>
+    <circle cx="92" cy="88" r="2.5" opacity="0.7"/>
+  </g>
+</svg>

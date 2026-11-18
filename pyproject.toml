@@ -1,0 +1,201 @@
+[project]
+name = "sidweave"
+version = "0.1.0"
+description = "Adaptive runtime for AI agents - hardware-aware routing, verified execution, continuous learning"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.12"
+authors = [
+    {name = "SidEra Labs", email = "team@sidweave.dev"}
+]
+maintainers = [
+    {name = "SidEra Labs", email = "team@sidweave.dev"}
+]
+keywords = [
+    "ai", "llm", "agents", "runtime", "routing", "mcp", "ollama", "model-selection"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "typer>=0.12.0",
+    "rich>=13.7.0",
+    "httpx>=0.27.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.29.0",
+    "sqlalchemy>=2.0.0,<2.1.0",
+    "aiosqlite>=0.19.0",
+    "ollama>=0.4.0",
+    "litellm>=1.50.0",
+    "mcp>=1.0.0",
+    "opentelemetry-api>=1.25.0",
+    "opentelemetry-sdk>=1.25.0",
+    "opentelemetry-exporter-otlp>=1.25.0",
+    "opentelemetry-instrumentation-fastapi>=0.45b0",
+    "opentelemetry-instrumentation-httpx>=0.45b0",
+    "opentelemetry-instrumentation-sqlalchemy>=0.45b0",
+    "psutil>=5.9.0",
+    "platformdirs>=4.2.0",
+    "pydantic-extra-types>=2.7.0",
+    "python-json-logger>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-mock>=3.12.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.5.0",
+    "mypy>=1.10.0",
+    "pre-commit>=3.6.0",
+]
+benchmark = [
+    "llama-cpp-python>=0.2.90",
+]
+all = [
+    "sidweave[dev]",
+    "sidweave[benchmark]",
+]
+
+[project.urls]
+Homepage = "https://github.com/SidEraLabs/SidWeave"
+Repository = "https://github.com/SidEraLabs/SidWeave"
+Issues = "https://github.com/SidEraLabs/SidWeave/issues"
+Documentation = "https://sidweave.dev/docs"
+
+[project.scripts]
+sidweave = "sidweave.cli.main:app"
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["sidweave*"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "W",   # pycodestyle warnings
+    "T20", # flake8-print
+    "SIM", # flake8-simplify
+    "RUF", # ruff-specific
+    "PERF",# flake8-perf
+    "PTH", # flake8-use-pathlib
+    "ERA", # flake8-eradicate
+    "RET", # flake8-return
+    "ARG", # flake8-unused-arguments
+    "FLY", # flynt
+    "NPY", # numpy
+    "PD",  # pandas
+    "PIE", # flake8-pie
+    "TID", # flake8-tidy-imports
+    "TRY", # tryceratops
+    "A",   # flake8-builtins
+    "Q",   # flake8-quotes
+    "DTZ", # datetime
+    "EXE", # flake8-executable
+    "ISC", # flake8-implicit-str-concat
+    "ICN", # flake8-import-conventions
+    "LOG", # logging
+    "PL",  # pylint
+]
+ignore = [
+    "S101", # assert in tests
+    "S311", # random in tests
+    "S603", # subprocess in tests
+    "S607", # full path in tests
+]
+
+[tool.ruff.format]
+skip-magic-trailing-comma = false
+quote-style = "double"
+indent-style = "space"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S311", "S603", "S607", "T201", "SLF001"]
+"src/sidweave/cli/*" = ["T201"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_no_return = true
+implicit_reexport = true
+exclude = [
+    "tests/fixtures/*",
+    ".venv/*",
+    "build/*",
+    "dist/*",
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "pydantic.*",
+    "litellm.*",
+    "ollama.*",
+    "mcp.*",
+    "opentelemetry.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "-ra",
+    "--tb=short",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["src/sidweave"]
+omit = [
+    "*/tests/*",
+    "*/conftest.py",
+    "*/__main__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+[tool.pre-commit-hooks]
+# See .pre-commit-config.yaml

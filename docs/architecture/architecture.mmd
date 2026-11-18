@@ -1,0 +1,114 @@
+flowchart TD
+    %% Styles
+    classDef agent fill:#1E293B,color:#F8FAFC,stroke:#334155,stroke-width:2px
+    classDef api fill:#0F172A,color:#F8FAFC,stroke:#2563EB,stroke-width:2px
+    classDef core fill:#0F172A,color:#F8FAFC,stroke:#7C3AED,stroke-width:2px
+    classDef provider fill:#0F172A,color:#F8FAFC,stroke:#DB2777,stroke-width:2px
+    classDef storage fill:#0F172A,color:#F8FAFC,stroke:#059669,stroke-width:2px
+    classDef optional fill:#1E293B,color:#94A3B8,stroke:#475569,stroke-width:1px,stroke-dasharray: 5 5
+    classDef external fill:#1E293B,color:#94A3B8,stroke:#475569,stroke-width:1px
+
+    %% External agents
+    subgraph EXT["Existing AI Agents / Applications"]
+        Agent1["OpenAI-compatible Client\n(OpenAI SDK, LangChain,\nLiteLLM, custom)"]
+        Agent2["MCP-enabled Agent\n(if configured)"]
+    end
+    class Agent1,Agent2 agent
+
+    %% SidWeave API Gateway
+    subgraph API["SidWeave API Gateway\n(FastAPI, OpenAI-compatible)"]
+        direction TB
+        Health["GET /health"]
+        Models["GET /v1/models"]
+        Chat["POST /v1/chat/completions"]
+        Route["POST /v1/sidweave/route"]
+        Hardware["GET /v1/sidweave/hardware"]
+        Providers["GET /v1/sidweave/providers"]
+        Profile["POST /v1/sidweave/models/{name}/profile"]
+    end
+    class Health,Models,Chat,Route,Hardware,Providers,Profile api
+
+    %% Core Runtime
+    subgraph CORE["SidWeave Runtime"]
+        direction TB
+        Router["Adaptive Routing Engine\n- Strategy: balanced/latency/cost/quality/local_first\n- Capability filtering\n- Hardware scoring\n- Historical performance"]
+        HardwareProfiler["Hardware Profiler\n- CPU/GPU/Memory detection\n- Inference backends\n- Periodic re-profiling"]
+        ModelRegistry["Model Registry\n- Ollama sync\n- NVIDIA NIM sync\n- Capability estimation\n- Profiling & persistence"]
+        ExecEngine["Verified Execution Engine\n- Precondition validation\n- Postcondition verification\n- Idempotency keys\n- Approval workflow\n- Reconciliation"]
+        ProviderGateway["Provider Gateway\n- Health monitoring\n- Fallback routing\n- Request dispatch"]
+        LearningEngine["Learning Engine\n- Outcome recording\n- Performance reports\n- Routing recommendations"]
+    end
+    class Router,HardwareProfiler,ModelRegistry,ExecEngine,ProviderGateway,LearningEngine core
+
+    %% Storage
+    subgraph STORAGE["SQLite Storage"]
+        direction TB
+        ModelsDB[(Models\n+ capabilities\n+ measurements)]
+        RoutingDB[(Routing decisions\n+ scores)]
+        ExecDB[(Tool executions\n+ verification)]
+        BenchmarkDB[(Benchmark runs)]
+        HardwareDB[(Hardware profiles)]
+    end
+    class ModelsDB,RoutingDB,ExecDB,BenchmarkDB,HardwareDB storage
+
+    %% Local Provider
+    subgraph LOCAL["Local Provider (Required)"]
+        Ollama["Ollama\n- Local models\ngemma:2b, llama3.1, etc.\n- No API key needed"]
+    end
+    class Ollama provider
+
+    %% Cloud Providers (Optional)
+    subgraph CLOUD["Cloud Providers (Optional)"]
+        NVIDIA["NVIDIA NIM\n- 20+ models\n- Requires NVIDIA_API_KEY"]
+        OpenAI["OpenAI\n- GPT models\n- Requires OPENAI_API_KEY"]
+        Anthropic["Anthropic\n- Claude models\n- Requires ANTHROPIC_API_KEY"]
+        OpenRouter["OpenRouter\n- 100+ models\n- Requires OPENROUTER_API_KEY"]
+    end
+    class NVIDIA,OpenAI,Anthropic,OpenRouter optional
+
+    %% Telemetry
+    Telemetry["OpenTelemetry\n- Custom metrics\n- Traces\n- OTLP export"]
+
+    %% Connections
+    Agent1 -->|"OpenAI API\nbase_url=http://localhost:8765/v1"| Chat
+    Agent2 -->|"MCP Protocol"| ExecEngine
+    
+    Chat -->|"1. Route request"| Router
+    Chat -->|"2. Execute via provider"| ProviderGateway
+    
+    Route --> Router
+    Hardware --> HardwareProfiler
+    Providers --> ProviderGateway
+    Profile --> ModelRegistry
+    
+    Router -->|"Available models\n+ capabilities"| ModelRegistry
+    Router -->|"Hardware profile"| HardwareProfiler
+    Router -->|"Historical perf."| ModelsDB
+    
+    ProviderGateway -->|"Healthy providers"| Router
+    ProviderGateway -->|"Dispatch request"| Ollama
+    ProviderGateway -.->|"If enabled & configured"| NVIDIA
+    ProviderGateway -.->|"If enabled & configured"| OpenAI
+    ProviderGateway -.->|"If enabled & configured"| Anthropic
+    ProviderGateway -.->|"If enabled & configured"| OpenRouter
+    
+    ModelRegistry -->|"Sync models"| Ollama
+    ModelRegistry -.->|"Sync models"| NVIDIA
+    ModelRegistry -->|"Persist"| ModelsDB
+    
+    Router -->|"Record decision"| RoutingDB
+    ExecEngine -->|"Record execution"| ExecDB
+    LearningEngine -->|"Read outcomes"| ExecDB
+    LearningEngine -->|"Read routing"| RoutingDB
+    
+    HardwareProfiler -->|"Store profile"| HardwareDB
+    
+    %% Telemetry connections
+    Chat -.->|"Metrics + traces"| Telemetry
+    Router -.->|"Metrics"| Telemetry
+    ProviderGateway -.->|"Metrics"| Telemetry
+    ExecEngine -.->|"Metrics"| Telemetry
+
+    %% Styling for subgraphs
+    classDef subgraphStyle fill:none,stroke:#334155,stroke-width:1px
+    class EXT,API,CORE,STORAGE,LOCAL,CLOUD subgraphStyle
