@@ -25,6 +25,9 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Generate uv lock file
+        run: uv lock --project pyproject.toml
+
       - name: Install dependencies
         run: uv pip install -e ".[dev]"
 
@@ -51,6 +54,9 @@ jobs:
         uses: astral-sh/setup-uv@v3
         with:
           enable-cache: true
+
+      - name: Generate uv lock file
+        run: uv lock --project pyproject.toml
 
       - name: Install dependencies
         run: uv pip install -e ".[dev]"
