@@ -26,6 +26,9 @@ jobs:
       - name: Generate uv lock file
         run: uv lock --project pyproject.toml
 
+      - name: Create virtual environment
+        run: uv venv
+
       - name: Install dependencies
         run: uv pip install -e ".[dev]"
 
@@ -53,6 +56,9 @@ jobs:
 
       - name: Generate uv lock file
         run: uv lock --project pyproject.toml
+
+      - name: Create virtual environment
+        run: uv venv
 
       - name: Install dependencies
         run: uv pip install -e ".[dev]"
