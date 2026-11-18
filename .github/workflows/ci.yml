@@ -66,6 +66,9 @@ jobs:
       - name: Install dependencies
         run: uv pip install -e ".[dev]"
 
+      - name: Install MyPy stubs
+        run: uv pip install types-psutil types-PyYAML
+
       - name: Run Ruff
         run: uv run ruff check src/
 
