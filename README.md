@@ -8,17 +8,17 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SidEraLabs/SidWeave/actions/workflows/ci.yml">
-    <img src="https://github.com/SidEraLabs/SidWeave/actions/workflows/ci.yml/badge.svg" alt="CI Status">
+  <a href="https://github.com/FlashSpeedie/SidWeave/actions/workflows/ci.yml">
+    <img src="https://github.com/FlashSpeedie/SidWeave/actions/workflows/ci.yml/badge.svg" alt="CI Status">
   </a>
-  <a href="https://github.com/SidEraLabs/SidWeave/blob/main/LICENSE">
+  <a href="https://github.com/FlashSpeedie/SidWeave/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
   </a>
   <a href="https://python.org">
     <img src="https://img.shields.io/badge/Python-3.12%2B-blue.svg" alt="Python Version">
   </a>
-  <a href="https://github.com/SidEraLabs/SidWeave/releases">
-    <img src="https://img.shields.io/github/v/release/SidEraLabs/SidWeave" alt="Release">
+  <a href="https://github.com/FlashSpeedie/SidWeave/releases">
+    <img src="https://img.shields.io/github/v/release/FlashSpeedie/SidWeave" alt="Release">
   </a>
 </p>
 
@@ -155,7 +155,6 @@ flowchart TD
     ExecEngine -->|"Record execution"| ExecDB
     LearningEngine -->|"Read outcomes"| ExecDB
     LearningEngine -->|"Read routing"| RoutingDB
-    
     HardwareProfiler -->|"Store profile"| HardwareDB
     
     Chat -.->|"Metrics + traces"| Telemetry
@@ -271,7 +270,7 @@ sidweave config --edit           # Edit configuration in $EDITOR
 
 ```bash
 # Clone and setup
-git clone https://github.com/SidEraLabs/SidWeave.git
+git clone https://github.com/FlashSpeedie/SidWeave.git
 cd SidWeave
 
 # Install with dev dependencies
@@ -315,8 +314,6 @@ See [SECURITY.md](SECURITY.md) for security policy and reporting.
 
 ## Links
 
-- Documentation: https://sidweave.dev/docs
-- Issues: https://github.com/SidEraLabs/SidWeave/issues
-- Discussions: https://github.com/SidEraLabs/SidWeave/discussions#   C I   t r i g g e r  
-  
- 
+- Repository: https://github.com/FlashSpeedie/SidWeave
+- Issues: https://github.com/FlashSpeedie/SidWeave/issues
+- Discussions: https://github.com/FlashSpeedie/SidWeave/discussions
