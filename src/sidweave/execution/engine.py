@@ -166,7 +166,9 @@ class MCPServerManager:
                 {
                     "name": tool.name,
                     "description": tool.description,
-                    "input_schema": tool.inputSchema,
+                    "input_schema": getattr(
+                        tool, "inputSchema", getattr(tool, "input_schema", None)
+                    ),
                 }
                 for tool in result.tools
             ]
@@ -197,7 +199,7 @@ class MCPServerManager:
             return {
                 "success": True,
                 "content": result.content,
-                "is_error": result.isError,
+                "is_error": getattr(result, "isError", getattr(result, "is_error", False)),
             }
 
     async def shutdown(self) -> None:
